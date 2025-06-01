@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>DeepSeek AI Chat</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+    input, button { padding: 10px; font-size: 16px; margin-top: 10px; width: 100%; }
+    #response { margin-top: 20px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>Ngobrol dengan DeepSeek AI</h2>
+  <input id="prompt" type="text" placeholder="Ketik pertanyaan Anda..." />
+  <button onclick="askAI()">Kirim</button>
+  <div id="response"></div>
+
+  <script>
+    async function askAI() {
+      const prompt = document.getElementById('prompt').value;
+      const responseDiv = document.getElementById('response');
+
+      responseDiv.innerText = 'Menunggu respons...';
+
+      const result = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer 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',
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'myapp@example.com',
+          'X-Title': 'ThunkableAI'
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      const data = await result.json();
+      const answer = data.choices[0].message.content;
+      responseDiv.innerText = answer;
+    }
+  </script>
+</body>
+</html>
